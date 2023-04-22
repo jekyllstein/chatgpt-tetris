@@ -460,6 +460,35 @@ const interval = setInterval(() => {
 
         // Add this method to the Tetris class
         addEventListeners() {
+           
+            const leftButton = document.getElementById("leftButton");
+    const upButton = document.getElementById("upButton");
+    const rightButton = document.getElementById("rightButton");
+    const downButton = document.getElementById("downButton");
+    
+    leftButton.addEventListener("click", () => {
+     this.handleInput({ keyCode:37 }); 
+    });
+    
+    upButton.addEventListener("click", () => {
+        this.handleInput({ keyCode: 38 }); // Simulate arrow up key press
+    });
+    
+    rightButton.addEventListener("click", () => {
+        this.handleInput({ keyCode: 39 }); // Simulate arrow right key press
+    });
+    
+    downButton.addEventListener("click", () => {
+        this.handleInput({ keyCode: 40 }); // Simulate arrow down key press
+    });
+
+    const spacebarButton = document.getElementById("spacebar");
+    spacebarButton.addEventListener("click", () => {
+        if (!this.isPaused && !this.isGameOver()) {
+            this.dropPieceToBottom();
+        }
+    });
+
             // Add an event listener to the window object
             window.addEventListener('keydown', (event) => {
             if (event.code === 'Space' && !this.isPaused && !this.isGameOver()) {
@@ -801,6 +830,8 @@ const interval = setInterval(() => {
               score.draw();
             }
           }
+
+         
           
       
           handleInput(event) {
@@ -849,7 +880,7 @@ const interval = setInterval(() => {
 
     context.scale(scale, scale);
    
-
+    
     
     // // Get the next piece
     // // const nextPiece = this.getNextPiece();
