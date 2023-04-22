@@ -840,6 +840,14 @@ const interval = setInterval(() => {
 // document.addEventListener("DOMContentLoaded", function() {
     const canvas = document.getElementById("tetris");
     const context = canvas.getContext("2d");
+
+    const scale = window.devicePixelRatio;
+    canvas.width = 200*scale;
+    canvas.height = 400*scale;
+    // canvas.style.width = '200px';
+    // canvas.style.height = '400px';
+
+    context.scale(scale, scale);
    
 
     
