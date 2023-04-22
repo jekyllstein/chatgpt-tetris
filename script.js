@@ -1,17 +1,4 @@
-const canvas = document.getElementById("canvas");
-const context = canvas.getContext("2d");
-const restartButton = document.getElementById("restart-btn");
-
-// // Get a reference to the nextPiece canvas element
-const nextPieceCanvas = document.getElementById('next-piece');
-const gameOverDiv =  document.getElementById("game-over");
-const levelDiv = document.getElementById("level");
-// // Get the next piece
-// // const nextPiece = this.getNextPiece();
-const ROWS = 20;
-const COLS = 10;
-
-let audioCtx;
+// let audioCtx;
 
 function startAudio() {
   // create new AudioContext
@@ -374,6 +361,62 @@ coinSound();
 
         }
 
+        async playClearSound() {
+            const audioCtx = new AudioContext();
+            const gainNode = audioCtx.createGain();
+            const dur = 0.4
+            gainNode.connect(audioCtx.destination);
+          
+            const oscillator1 = audioCtx.createOscillator();
+            const oscillator2 = audioCtx.createOscillator();
+            oscillator1.type = "square";
+            oscillator2.type = "sine";
+            oscillator1.connect(gainNode);
+            oscillator2.connect(gainNode);
+            
+          
+            oscillator1.frequency.setValueAtTime(2000, audioCtx.currentTime);
+            oscillator1.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + dur);
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+            oscillator2.frequency.setValueAtTime(1800, audioCtx.currentTime);
+            oscillator2.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + dur);
+          
+            oscillator1.start();
+            oscillator2.start();
+            oscillator1.stop(audioCtx.currentTime + dur);
+            oscillator2.stop(audioCtx.currentTime + dur);
+            
+          }
+          
+          
+
+    playGameOverSound() {
+ // Create audio context and oscillator
+const audioContext = new AudioContext();
+const oscillator = audioContext.createOscillator();
+oscillator.type = "sine";
+oscillator.connect(audioContext.destination);
+
+// Start the oscillator
+oscillator.start();
+
+// Define initial frequency, rate of change, and duration
+let frequency = 200;
+const frequencyChange = 1;
+const duration = 1000;
+
+// Gradually lower frequency over time
+const interval = setInterval(() => {
+  oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+  frequency -= frequencyChange;
+  if (frequency <= 0) {
+    clearInterval(interval);
+    oscillator.stop();
+  }
+}, duration / (frequency / frequencyChange));
+
+    }
 
         constructor(canvas) {
             this.canvas = canvas;
@@ -404,7 +447,7 @@ coinSound();
             this.isRunning = false;
             this.isPaused = false;
             this.level = 1;
-            this.threshold = 100;
+            this.threshold = 500;
           }
 
           dropPieceToBottom() {
@@ -683,6 +726,9 @@ coinSound();
              // Show the game over message
              document.getElementById("game-over").style.display = "block";
              restartButton.style.display = "inline-block";
+
+             // Play the game over sound
+             this.playGameOverSound()
             return;
         }
         else {
@@ -736,13 +782,15 @@ coinSound();
               }
               if (rowFilled) {
                 // Add a delay before removing the row
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 50));
                 // Remove the row from the board
                 this.board.splice(y, 1);
                 // Add a new empty row at the top
                 this.board.unshift(Array(COLS).fill(0));
                 // Increment the cleared rows count
+                this.playClearSound()
                 rowsCleared++;
+                y++;
               }
             }
             if (rowsCleared > 0) {
@@ -751,7 +799,6 @@ coinSound();
               this.score += clearedScore;
               score.setScore(clearedScore);
               score.draw();
-              this.playPointSound();
             }
           }
           
@@ -783,35 +830,32 @@ coinSound();
             }
           }
         }
+  // // Get a reference to the nextPiece canvas element
+  const nextPieceCanvas = document.getElementById('next-piece');
+  const gameOverDiv =  document.getElementById("game-over");
+  const levelDiv = document.getElementById("level");  
+   const restartButton = document.getElementById("restart-btn");
+   const ROWS = 20;
+    const COLS = 10;
+// document.addEventListener("DOMContentLoaded", function() {
+    const canvas = document.getElementById("tetris");
+    const context = canvas.getContext("2d");
+   
+
     
+    // // Get the next piece
+    // // const nextPiece = this.getNextPiece();
+ 
 
+    const game = new Tetris(canvas);
+    window.addEventListener('keydown', function(e) {
+    // Prevent the default browser behavior for arrow keys
+    if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+    }, false);
+    const score = new Score(context, 10, 100, "yellow");
 
-
-      
-const game = new Tetris(canvas);
-window.addEventListener('keydown', function(e) {
-  // Prevent the default browser behavior for arrow keys
-  if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
-    e.preventDefault();
-  }
-}, false);
-const score = new Score(context, 10, 100, "yellow");
-
-game.addEventListeners()
-game.start()
-
-// window.addEventListener('keydown', function(event) {
-//     if (event.key === 's') {
-//         const gameStartSound = new AudioContext();
-//         const gameStartOscillator = gameStartSound.createOscillator();
-//         gameStartOscillator.frequency.value = 220;
-//         gameStartOscillator.type = 'square';
-//         gameStartOscillator.connect(gameStartSound.destination);
-//         gameStartOscillator.start();
-//         gameStartOscillator.stop(Date.now() + .1);
-//         game.start();
-//   }})
-
-//  oscillator.connect(audioCtx.destination);
-//   oscillator.start();
-//   oscillator.stop(Date.now() + 0.5);
+    game.addEventListeners()
+    game.start()
+// });   

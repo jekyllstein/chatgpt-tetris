@@ -1,3 +1,93 @@
-canvas {
-	border: 1px solid #000;
+
+
+
+#game-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+	/* margin-top: 1vw; */
+    /* margin-left: 1vw; */
+    width: 100vw;
+    height: 100vw;
+    max-width: 500px;
+    max-height: 600px;
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* align-items: center; */
 }
+
+#tetris {
+    width: 50vw;
+    height: 100vw;
+    max-width: 300px;
+    max-height: 600px;
+    margin-top: 1vw;
+    margin-left: 1vw;
+}
+
+#next-piece-container {
+    position: absolute;
+    top: 1vh;
+    right: 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    /* margin-right: 10px; */
+  }
+
+#score {
+    color: black;
+    position: absolute;
+    right: 0%;
+    top: 10vh;
+    font-size: larger;
+    font-weight: bold;
+  }
+
+  #level {
+    color: black;
+    position: absolute;
+    right: 0%;
+    top: 15vh;
+    font-size: larger;
+    font-weight: bold;
+  }
+
+#pause-btn {
+    position: absolute;
+    right: 0%;
+    top: 20vh;
+    /* width: 5vw; */
+    font-size: larger;
+    font-weight: bold;
+}
+
+  #game-over {
+  position: absolute;
+  top: 25vh;
+    right: 0%;
+  color: red;
+  font-size: x-large;
+  font-weight: bold;
+  display: none;
+}
+
+
+
+  #next-piece-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: larger;
+    color: black;
+  }
+
+  #restart-btn {
+		position: absolute;
+		bottom: 0vh;
+    right: 0%;
+        font-size: larger;
+        font-weight:bold;
+		display: none;
+  }
+
+
