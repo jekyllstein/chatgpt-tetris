@@ -836,6 +836,7 @@ const interval = setInterval(() => {
       
           handleInput(event) {
             console.log("input received");
+            if (!this.isPaused) {
             switch (event.keyCode) {
               case 37: // left arrow
                 if (this.piece.canMove(-1, 0, this.board)) {
@@ -860,6 +861,7 @@ const interval = setInterval(() => {
                 break;
             }
           }
+        }
         }
   // // Get a reference to the nextPiece canvas element
   const nextPieceCanvas = document.getElementById('next-piece');
