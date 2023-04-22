@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tetris Game</title>
+</head>
+<body>
+  <canvas id="canvas" width="200" height="400"></canvas>
+  <button id="pause-btn">Pause</button>
+
+  <div id="game-container">
+    <canvas id="tetris"></canvas>
+    <div id="next-piece-container">
+      <div id="next-piece-label">Next Piece</div>
+      <canvas id="next-piece" width="80" height="80"></canvas>
+    </div>
+    <div id="score">Score: 0</div>
+    <div id="level">Level: 1</div>
+  </div>
+  <div id="game-over">Game Over</div>
+  <button id="restart-btn">Start New Game</button>
+
+  <script src="script.js"></script>
+</body>
+<style>
+#game-container {
+	position: absolute;
+	top: -150px;
+	left: 120px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+  #tetris {
+    margin-right: 10px;
+  }
+
+  #game-over {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: red;
+  font-size: 24px;
+  font-weight: bold;
+  display: none;
+}
+
+
+  #next-piece-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  #next-piece-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    color: black;
+  }
+
+  #restart-btn {
+		position: absolute;
+		top: 50%;
+		right: 150px;
+		transform: translateY(-50%);
+		display: none;
+  }
+
+  #score {
+    color: black;
+  }
+  #level {
+    color: black;
+  }
+</style>
+</html>
+
