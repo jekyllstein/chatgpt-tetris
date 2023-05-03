@@ -14,8 +14,8 @@ body {
 #game-container {
 	/* margin-top: 1vw; */
     /* margin-left: 1vw; */
-    width: 100vmin;
-    height: 100vmin;
+    width: 100vw;
+    height: 100vh;
 	  display: flex;
     justify-content: center;
 	 /* flex-direction: column; */
@@ -23,18 +23,27 @@ body {
     justify-items: center;
     align-items: center;
     flex-direction: row;
+    background-color: #575757;
 }
 
 
 
 #tetris {
-    height: 96vmin;
-    width: 48vmin;
+
+    width: 70vmin;
+    max-width: 48vh;
     /* max-height: 100vmin; */
-    /* aspect-ratio: 1/2; */
+    aspect-ratio: 1/2;
     /* flex-direction: column; */
+    border: solid black 1px;
 }
 
+/* @media (orientation: landscape) {
+  #tetris {
+    height: 96vh;
+    width: 48vh;
+  } 
+} */
 /* #next-piece-container {
   display: flex;
   flex-direction: column;
@@ -56,7 +65,8 @@ body {
 
 #left-boxes{
   margin-right: 1vmin;
-  max-width: 10vmin;
+  max-width: 20vmin;
+  /* width: 10vmin; */
   display: flex;
   flex-direction: column;
   margin-top: 5vmin;
@@ -66,8 +76,8 @@ body {
 
 #right-boxes {
   margin-left: 1vmin;
-  max-width: 10vmin;
-  width: 10vmin;
+  max-width: 0vmin;
+  width: 0vmin;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -75,20 +85,20 @@ body {
 
 #score {
     color: black;
-    font-size: 2vmin;
+    font-size: 3vmin;
     font-weight: bold;
   }
 
   #level {
     color: black;
     font-size: larger;
-    font-size: 2vmin;
+    font-size: 3vmin;
     font-weight: bold;
   }
 
 #pause-btn {
     /* width: 5vw; */
-    font-size: 2vmin;
+    font-size: 3vmin;
     font-weight: bold;
 }
 
@@ -102,7 +112,7 @@ body {
 
   #next-piece-label {
     font-weight: bold;
-    font-size: 2vmin;
+    font-size: 3vmin;
     color: black;
   }
 
