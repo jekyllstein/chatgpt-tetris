@@ -474,6 +474,7 @@ const interval = setInterval(() => {
                 game.reset();
                 restartButton.style.display = 'none';
                 gameOverDiv.style.display = 'none';
+                pauseButton.style.display = '';
                 this.piece.reset();
                 this.draw();
                 this.isRunning = true;
@@ -860,4 +861,83 @@ const interval = setInterval(() => {
 
     game.addEventListeners()
     game.start()
+
+
+    
 // });   
+
+document.addEventListener('touchstart', handleTouchStart, false);        
+document.addEventListener('touchmove', handleTouchMove, false);
+
+var xDown = null;                                                        
+var yDown = null;
+
+function getTouches(evt) {
+  return evt.touches ||             // browser API
+         evt.originalEvent.touches; // jQuery
+}                                                     
+                                                                         
+function handleTouchStart(evt) {
+    const firstTouch = getTouches(evt)[0];                                      
+    xDown = firstTouch.clientX;                                      
+    yDown = firstTouch.clientY;                                      
+};                                                
+                                                                         
+function handleTouchMove(evt) {
+    if ( ! xDown || ! yDown ) {
+        return;
+    }
+
+    var xUp = evt.touches[0].clientX;                                    
+    var yUp = evt.touches[0].clientY;
+
+    var xDiff = xDown - xUp;
+    var yDiff = yDown - yUp;
+                                                                         
+    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+        if ( xDiff > 0 ) {
+                if (game.piece.canMove(1, 0, game.board)) {
+                  game.piece.moveRight(game.board);
+                  game.draw();
+                }
+            /* right swipe */ 
+        } else {
+            /* left swipe */
+        }                       
+    } else {
+        if ( yDiff > 0 ) {
+            /* down swipe */ 
+        } else { 
+            /* up swipe */
+        }                                                                 
+    }
+    /* reset values */
+    xDown = null;
+    yDown = null;                                             
+};
+          // handleInput(event) {
+          //   console.log("input received");
+          //   switch (event.keyCode) {
+          //     case 37: // left arrow
+          //       if (this.piece.canMove(-1, 0, this.board)) {
+          //         this.piece.moveLeft(this.board);
+          //         this.draw();
+          //       }
+          //       break;
+          //     case 39: // right arrow
+          //       if (this.piece.canMove(1, 0, this.board)) {
+          //         this.piece.moveRight(this.board);
+          //         this.draw();
+          //       }
+          //       break;
+          //     case 40: // down arrow
+          //       if (this.piece.canMove(0, 1, this.board)) {
+          //         this.piece.moveDown(this.board);
+          //         this.draw();
+          //       }
+          //       break;
+          //     case 38: // up arrow
+          //       this.piece.rotate(this.board);
+          //       break;
+          //   }
+          // }
