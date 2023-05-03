@@ -7,18 +7,23 @@
 <body>
   <!-- <canvas id="canvas" width="200" height="400"></canvas> -->
   
-
   <div id="game-container">
-    <canvas id="tetris" width="200" height="400"></canvas>
-    <div id="next-piece-container">
-      <div id="next-piece-label">Next Piece</div>
-      <canvas id="next-piece" width="80" height="80"></canvas>
+    <div id="left-boxes">
+      <div id="next-piece-container">
+        <div id="next-piece-label">Next Piece</div>
+        <canvas id="next-piece" width="80" height="80"></canvas>
+      </div>
+      <div id="level">Level: 1</div>
+      <div id="score">Score: 0</div>
+    
     </div>
-    <div id="score">Score: 0</div>
-    <div id="level">Level: 1</div>
-    <div id="game-over">Game Over</div>
-    <button id="pause-btn">Pause</button>
-    <button id="restart-btn">Start New Game</button>
+    <canvas id="tetris" width=200 height=400></canvas>
+    <div id = "right-boxes">
+     
+      <div id="game-over">Game Over</div>
+      <button id="pause-btn">Pause</button>
+      <button id="restart-btn">Start New Game</button>
+    </div>
   </div>
   
   

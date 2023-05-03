@@ -160,18 +160,19 @@ const pauseButton = document.getElementById('pause-btn');
       
         drawNextPiece(canvas) {
           const context = canvas.getContext('2d');
-          const blockSize = canvas.width / 4;
+          const blockSize = Math.round(canvas.width / 4);
           const x = canvas.width / 2 - blockSize * 2;
           const y = canvas.height / 2 - blockSize * 2;
+          const gapWidth = Math.round(blockSize*0.04)
           for (let row = 0; row < this.shape.length; row++) {
             for (let col = 0; col < this.shape[row].length; col++) {
               if (this.shape[row][col]) {
                 const blockX = x + col * blockSize;
                 const blockY = y + row * blockSize;
                 context.fillStyle = this.color;
-                context.fillRect(blockX, blockY, blockSize, blockSize);
-                context.strokeStyle = 'black';
-                context.strokeRect((col + x) * blockSize,(row + y)*blockSize, blockSize - 1, blockSize - 1);
+                context.fillRect(blockX+gapWidth, blockY+gapWidth, blockSize - gapWidth, blockSize - gapWidth);
+                // context.strokeStyle = 'black';
+                // context.strokeRect((col + x) * blockSize,(row + y)*blockSize, blockSize - 1, blockSize - 1);
               }
             }
           }
@@ -556,7 +557,7 @@ const interval = setInterval(() => {
             this.ctx.fillStyle = '#000';
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-            const blockSize = 20;
+            const blockSize = Math.round(this.canvas.width/10);
           
             // Draw the board
             this.board.forEach((row, y) => {
@@ -573,19 +574,20 @@ const interval = setInterval(() => {
       
         drawPiece() {
             if (!this.isGameOver()) {
-            const blockSize = 20;
+            const blockSize = Math.round(this.canvas.width/10);
+            const gapWidth = Math.round(blockSize*0.04)
           this.piece.shape.forEach((rowOffset, y) => {
             rowOffset.forEach((value, x) => {
               if (value != 0) {
                 this.ctx.fillStyle = this.piece.color;
                 this.ctx.fillRect(
-                    (this.piece.col + x) * blockSize,
-                    (this.piece.row + y) * blockSize,
-                    blockSize,
-                    blockSize
+                    (this.piece.col + x) * blockSize + gapWidth,
+                    (this.piece.row + y) * blockSize + gapWidth,
+                    Math.round(blockSize) - gapWidth,
+                    Math.round(blockSize) - gapWidth
                 );
-                this.ctx.strokeStyle = 'black';
-                this.ctx.strokeRect((this.piece.col + x) * blockSize,(this.piece.row + y)*blockSize, blockSize - 1, blockSize - 1);
+                // this.ctx.strokeStyle = 'black';
+                // this.ctx.strokeRect((this.piece.col + x) * blockSize,(this.piece.row + y)*blockSize, Math.round(blockSize - 0.01*blockSize), Math.round(blockSize - 0.01*blockSize));
               }
             });
           });
@@ -726,7 +728,7 @@ const interval = setInterval(() => {
              // Show the game over message
              document.getElementById("game-over").style.display = "block";
              restartButton.style.display = "inline-block";
-
+             document.getElementById("pause-btn").style.display = "none";
              // Play the game over sound
              this.playGameOverSound()
             return;
