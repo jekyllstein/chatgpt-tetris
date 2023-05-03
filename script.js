@@ -902,12 +902,20 @@ function handleTouchMove(evt) {
                 }
             /* right swipe */ 
         } else {
-            /* left swipe */
+            if (game.piece.canMove(-1, 0, game.board)) {
+              game.piece.moveLeft(game.board);
+              game.draw();
+            }
         }                       
     } else {
         if ( yDiff > 0 ) {
+          if (game.piece.canMove(0, 1, game.board)) {
+            game.piece.moveDown(game.board);
+            game.draw();
+          }
             /* down swipe */ 
         } else { 
+          game.piece.rotate(game.board)
             /* up swipe */
         }                                                                 
     }
