@@ -895,7 +895,7 @@ function handleTouchMove(evt) {
     var yDiff = yDown - yUp;
                                                                          
     if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-        if ( xDiff > 0 ) {
+        if ( xDiff < 0 ) {
                 if (game.piece.canMove(1, 0, game.board)) {
                   game.piece.moveRight(game.board);
                   game.draw();
@@ -908,10 +908,13 @@ function handleTouchMove(evt) {
             }
         }                       
     } else {
-        if ( yDiff > 0 ) {
+        if ( yDiff < 0 ) {
           if (game.piece.canMove(0, 1, game.board)) {
-            game.piece.moveDown(game.board);
-            game.draw();
+            if (!game.isPaused && ! game.isGameOver()) {
+                game.dropPieceToBottom();
+                game.draw();
+            }
+            // game.piece.moveDown(game.board);
           }
             /* down swipe */ 
         } else { 
