@@ -1,5 +1,11 @@
 // let audioCtx;
 
+  const majThird = 5/4;
+  const minThird = 6/5;
+  const perFifth = 3/2;
+  const perFourth = 4/3;
+  const majSixth = 5/3;
+  const minSixth = 8/5; 
 function startAudio() {
   // create new AudioContext
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -452,10 +458,11 @@ const interval = setInterval(() => {
           }
 
           dropPieceToBottom() {
+            playDropToBottomSound();
             while (this.piece.canMove(0, 1, this.board)) {
             this.piece.moveDown(this.board);
             }
-
+            // playScoreSound();
             this.lockPiece();
         }
 
@@ -708,6 +715,7 @@ const interval = setInterval(() => {
               if (this.piece.canMove(0, 1, this.board)) {
                 // console.log("can move down")
                 this.piece.moveDown(this.board);
+                // playDropSound();
               } else {
                 // console.log("can't move down")
                 this.lockPiece();
@@ -717,9 +725,10 @@ const interval = setInterval(() => {
             this.draw();
 
             if (this.score >= this.threshold) {
+                playScoreSound(440);
                 this.level += 1;
                 this.threshold *= 2;
-                this.dropInterval *= 0.5;
+                this.dropInterval *= 0.9;
             }
           
             this.lastTime = now;
@@ -791,7 +800,9 @@ const interval = setInterval(() => {
                 // Add a new empty row at the top
                 this.board.unshift(Array(COLS).fill(0));
                 // Increment the cleared rows count
-                this.playClearSound()
+                // this.playClearSound()
+                // playScoreSound();
+                repeatArpegio([200, 300], majThird, perFifth, 0.02, 4, "triangle");
                 rowsCleared++;
                 y++;
               }
@@ -808,6 +819,7 @@ const interval = setInterval(() => {
       
           handleInput(event) {
             console.log("input received");
+            if (!this.isPaused) {
             switch (event.keyCode) {
               case 37: // left arrow
                 if (this.piece.canMove(-1, 0, this.board)) {
@@ -832,7 +844,7 @@ const interval = setInterval(() => {
                 break;
             }
           }
-        }
+        }}
   // // Get a reference to the nextPiece canvas element
   const nextPieceCanvas = document.getElementById('next-piece');
   const gameOverDiv =  document.getElementById("game-over");
@@ -861,7 +873,19 @@ const interval = setInterval(() => {
 
     game.addEventListeners()
     game.start()
-
+    // playScoreSound(440);
+    // playScoreSound(300);
+    // repeatArpegio([200, 300], majThird, perFifth, 0.02, 4, "triangle");
+    // playArpeggio(200, majThird, perFifth, 0.02, 4);
+    // playArpeggio(300, majThird, perFifth, 0.02, 4);
+    // playArpeggio(400, majThird, perFifth, 0.02, 4);
+    // playArpeggio(200, minThird, perFifth, 0.1, 3);
+    // playArpeggio(200, perFourth, majSixth, 0.1, 3);
+function repeatArpegio(bases, m2, m3, interval, repeat, oscType) {
+  for (let i = 0; i < bases.length; i++) {
+    playArpeggio(bases[i], m2, m3, interval, repeat, oscType);
+  }
+}
 
     
 // });   
@@ -893,7 +917,10 @@ function handleTouchMove(evt) {
 
     var xDiff = xDown - xUp;
     var yDiff = yDown - yUp;
-                                                                         
+    if (!game.isPaused) {                                          
+    if (xDiff == 0 && yDiff == 0) {
+      game.piece.rotate(game.board);
+    }
     if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
         if ( xDiff < 0 ) {
                 if (game.piece.canMove(1, 0, game.board)) {
@@ -925,30 +952,158 @@ function handleTouchMove(evt) {
     /* reset values */
     xDown = null;
     yDown = null;                                             
-};
-          // handleInput(event) {
-          //   console.log("input received");
-          //   switch (event.keyCode) {
-          //     case 37: // left arrow
-          //       if (this.piece.canMove(-1, 0, this.board)) {
-          //         this.piece.moveLeft(this.board);
-          //         this.draw();
-          //       }
-          //       break;
-          //     case 39: // right arrow
-          //       if (this.piece.canMove(1, 0, this.board)) {
-          //         this.piece.moveRight(this.board);
-          //         this.draw();
-          //       }
-          //       break;
-          //     case 40: // down arrow
-          //       if (this.piece.canMove(0, 1, this.board)) {
-          //         this.piece.moveDown(this.board);
-          //         this.draw();
-          //       }
-          //       break;
-          //     case 38: // up arrow
-          //       this.piece.rotate(this.board);
-          //       break;
-          //   }
-          // }
+}};
+
+function playDropSound() {
+  // create new AudioContext
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  // play a sound
+ // Create an AudioContext
+  const osc = audioContext.createOscillator();
+  osc.connect(audioContext.destination);
+  osc.type = "triangle";
+  osc.frequency.value = 400;
+  t = audioContext.currentTime
+  osc.start()
+  osc.stop(t + .05)
+}
+// function playDropToBottomSound() {
+//   // create new AudioContext
+//   audioContext = new (window.AudioContext || window.webkitAudioContext)();
+//   // play a sound
+//  // Create an AudioContext
+//   const osc = audioContext.createOscillator();
+//   osc.connect(audioContext.destination);
+//   osc.noise()
+//   // osc.type = "triangle";
+//   // osc.frequency.value = 400;
+//   t = audioContext.currentTime
+//   osc.start()
+//   osc.stop(t + .05)
+// }
+
+function playDropToBottomSound() {
+  // create audio context
+  const audioCtx = new AudioContext();
+  
+  // create gain node to control volume
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+  
+  // create oscillator
+  const oscillator = audioCtx.createOscillator();
+  oscillator.type = 'triangle';
+  oscillator.frequency.setValueAtTime(500, audioCtx.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.5);
+  
+  // connect oscillator to gain node and gain node to audio context destination
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  
+  // start oscillator and stop after 0.5 seconds
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.5);
+}
+
+function playScoreSound(baseFreq) {
+  // create audio context  
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const starttime = audioCtx.currentTime + 0.5; 
+  console.log(audioCtx.currentTime);
+  console.log(starttime);
+  // const stoptime = starttime + 1.5 
+  // create gain node to control volume
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(0.0, audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(0.1, starttime);
+
+  // gainNode.gain.exponentialRampToValueAtTime(0.001, stoptime)
+  
+  // create two oscillators to generate harmonics
+  const osc1 = audioCtx.createOscillator();
+  const osc2 = audioCtx.createOscillator();
+  const osc3 = audioCtx.createOscillator();
+  const oscType = "sine";
+  osc1.type = oscType;
+  osc2.type = oscType;
+  osc3.type = oscType;
+
+  function makeTriad(base, m2, m3, tplus) {
+    osc1.frequency.setValueAtTime(base, starttime + tplus);
+    osc2.frequency.setValueAtTime(base*m2, starttime + tplus);
+    osc3.frequency.setValueAtTime(base*m3, starttime + tplus);
+  }
+  // connect oscillators to gain node and gain node to audio context destination
+  osc1.connect(gainNode);
+  osc2.connect(gainNode);
+  osc3.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  
+  osc1.start()
+  osc2.start()
+  osc3.start()
+
+  makeTriad(baseFreq, majThird, perFifth, 0.0);
+  makeTriad(baseFreq*1.122, minThird, minSixth, 0.25);
+  makeTriad(baseFreq, perFourth, majSixth, 0.75);
+  makeTriad(baseFreq, majThird, perFifth, 1.25);
+  // makeTriad(baseFreq*perFifth, 1/perFourth, 1/minSixth, 1.0);
+  // makeTriad(baseFreq*perFifth, 1/perFourth, 1/minSixth, 1.0);
+  // makeTriad(baseFreq*perFifth, majThird, perFifth, 1.0);
+  // makeTriad(baseFreq*majThird, majThird, perFifth, 1.5);
+  // makeTriad(baseFreq*majSixth, minThird, perFifth, 2.0);
+  stoptime = 2.25;
+  // makeTriad(baseFreq*perFifth, 1/perFourth, 1/minSixth, 0.5);
+  // makeTriad(baseFreq, perFourth, majSixth, 0.5);
+  // makeTriad(baseFreq, majThird, perFifth, 1.0);
+  // start oscillators and stop after 0.5 seconds
+  // osc1.start();
+  // osc2.start();
+  // osc3.start();
+  // osc1.stop(audioCtx.currentTime + 0.5);
+  // osc2.stop(audioCtx.currentTime + 0.5);
+  // osc3.stop(audioCtx.currentTime + 0.5);
+  // makeTriad(baseFreq, perFourth, minSixth, 0.5);
+  // makeTriad(baseFreq, majThird, perFifth, 0.0);
+  // makeTriad(baseFreq, perFourth, majSixth, 0.5);
+  // osc1.frequency.setValueAtTime(baseFreq, audioCtx.currentTime+.2);
+  // osc3.frequency.setValueAtTime(perFourth*baseFreq, audioCtx.currentTime+.2);
+  // osc2.frequency.setValueAtTime(majSixth*baseFreq, audioCtx.currentTime+.2);
+  // // osc1.start();
+  // osc1.frequency.setValueAtTime(baseFreq, audioCtx.currentTime+0.4);
+  // osc3.frequency.setValueAtTime(majThird*baseFreq, audioCtx.currentTime+0.4);
+  // osc2.frequency.setValueAtTime(baseFreq*perFifth, audioCtx.currentTime+0.4);
+  // osc2.start();
+  // osc3.start();
+  osc1.stop(stoptime);
+  osc2.stop(stoptime); 
+  osc3.stop(stoptime);
+}
+
+function playArpeggio(base, m2, m3, interval, repeats, oscType) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const starttime = audioCtx.currentTime + 0.1;
+  // const stoptime = starttime + 1.5;
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+  gainNode.connect(audioCtx.destination);
+  function makeNote(freq, time) {
+    const noteOsc = audioCtx.createOscillator();
+    noteOsc.type = oscType;
+    noteOsc.frequency.setValueAtTime(freq, time);
+    noteOsc.connect(gainNode);
+    noteOsc.start(time);
+    noteOsc.stop(time + interval);
+  }
+  for (let i = 0; i <= repeats; i++) {
+    const bonusTime = i * 3 * interval;
+    newbase = base*(2**i);
+    makeNote(newbase, starttime + bonusTime);
+    makeNote(newbase * m2, starttime + interval + bonusTime);
+    makeNote(newbase * m3, starttime + 2 * interval + bonusTime);
+  }
+}
+
+
+
